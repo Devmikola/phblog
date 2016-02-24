@@ -8,6 +8,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 ?>
@@ -27,7 +28,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => 'Phblog',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -36,14 +37,17 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+
+            ['label' => 'Posts', 'url' => [Url::toRoute(['/post/index'])], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => 'Profile', 'url' => [Url::toRoute(['/user/profile/show', 'id' => Yii::$app->user->id])], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => 'Settings', 'url' => ['/user/settings/profile'], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => 'Registration', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest],
+            ['label' => 'AdminPanel', 'url' => ['/user/admin/index'], 'visible' => ! Yii::$app->user->identity ? false : Yii::$app->user->identity->isAdmin],
             Yii::$app->user->isGuest ?
-                ['label' => 'Login', 'url' => ['/site/login']] :
+                ['label' => 'Login', 'url' => ['/user/security/login']] :
                 [
-                    'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                    'url' => ['/site/logout'],
+                    'label' => 'Logout [' . Yii::$app->user->identity->username . ']',
+                    'url' => ['/user/security/logout'],
                     'linkOptions' => ['data-method' => 'post']
                 ],
         ],
@@ -61,7 +65,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; Phblog <?= date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
