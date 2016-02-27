@@ -93,3 +93,7 @@ a.desc:after {
 a {
     text-decoration: none;
 }
+
+.display-none {
+    display: none;
+}

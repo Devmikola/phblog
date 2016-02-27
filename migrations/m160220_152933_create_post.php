@@ -24,14 +24,4 @@ class m160220_152933_create_post extends Migration
         $this->dropTable('post');
     }
 
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
-
-    public function safeDown()
-    {
-    }
-    */
 }

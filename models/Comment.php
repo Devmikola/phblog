@@ -9,26 +9,32 @@ use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 
+
 /**
- * This is the model class for table "post".
+ * This is the model class for table "comment".
  *
  * @property integer $id
+ * @property integer $id_in_post
+ * @property integer $parent_id
  * @property integer $user_id
- * @property string $title
+ * @property integer $post_id
  * @property string $content
  * @property string $created_at
  * @property string $updated_at
  *
+ * @property Comment $parent
+ * @property Comment[] $comments
+ * @property Post $post
  * @property User $user
  */
-class Post extends \yii\db\ActiveRecord
+class Comment extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'post';
+        return 'comment';
     }
 
     /**
@@ -37,11 +43,10 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'integer'],
-            [['title', 'content'], 'required'],
+            [['id_in_post', 'parent_id', 'user_id', 'post_id'], 'integer'],
+            [['content'], 'required'],
             [['content'], 'string'],
-            [['created_at', 'updated_at'], 'safe'],
-            [['title'], 'string', 'max' => 240]
+            [['created_at', 'updated_at'], 'safe']
         ];
     }
 
@@ -52,8 +57,10 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'id_in_post' => 'Id In Post',
+            'parent_id' => 'Parent ID',
             'user_id' => 'User ID',
-            'title' => 'Title',
+            'post_id' => 'Post ID',
             'content' => 'Content',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -84,18 +91,52 @@ class Post extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getParent()
+    {
+        return $this->hasOne(Comment::className(), ['id' => 'parent_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComments()
+    {
+        return $this->hasMany(Comment::className(), ['parent_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPost()
+    {
+        return $this->hasOne(Post::className(), ['id' => 'post_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public function getComments()
+    public function beforeSave($insert)
     {
-        $this->hasMany(Comment::className(), ['post_id' => 'id']);
+        if (parent::beforeSave($insert)) {
+
+            if (!$this->id_in_post)
+            {
+                $max_id_in_post = Comment::find()->where(['post_id' => $this->post_id])->max('id_in_post');
+                $max_id_in_post ? $this->id_in_post = $max_id_in_post + 1 : $this->id_in_post = 1;
+            }
+
+            return true;
+        }
+        return false;
     }
 
-    public function getParentComments()
+    public function getChildComments()
     {
-        return Comment::find()->where(['post_id' => $this->id, 'parent_id' => null])->all();
+        return self::find()->where(['post_id' => $this->post_id, 'parent_id' => $this->id])->all();
     }
 }

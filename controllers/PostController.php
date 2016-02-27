@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+
 use Yii;
 use app\models\Post;
 use yii\data\ActiveDataProvider;
@@ -10,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
+use app\models\Comment;
 
 /**
  * PostController implements the CRUD actions for Post model.
@@ -59,9 +61,6 @@ class PostController extends Controller
             ->limit($pagination->limit)
             ->all();
 
-
-//        $posts = Post::find()->all();
-
         return $this->render('index', [
             'posts' => $posts,
             'pagination' => $pagination
@@ -77,6 +76,7 @@ class PostController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'create_new_comment' => new Comment()
         ]);
     }
 

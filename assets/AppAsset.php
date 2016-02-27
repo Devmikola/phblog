@@ -21,6 +21,10 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
+        '//cdn.jsdelivr.net/jquery.scrollto/2.1.2/jquery.scrollTo.min.js'
+    ];
+    public $jsOptions = [
+        'position' => \yii\web\View::POS_BEGIN
     ];
     public $depends = [
         'yii\web\YiiAsset',
