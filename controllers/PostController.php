@@ -29,8 +29,11 @@ class PostController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['update', 'delete'],
                 'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                     [
                         'actions' => ['update', 'delete'],
                         'allow' => true,

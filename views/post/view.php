@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Posts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile('/js/view.js', ['position' => yii\web\View::POS_END]);
 ?>
-<div class="post-view" xmlns="http://www.w3.org/1999/html">
+<div class="post-view" post-id="<?= $model->id?>" xmlns="http://www.w3.org/1999/html">
 
     <h1><?= ucfirst(Html::encode($this->title)) ?></h1>
 
@@ -37,7 +37,7 @@ $this->registerJsFile('/js/view.js', ['position' => yii\web\View::POS_END]);
 
     </div>
 
-    <?php if ($model->user->id == Yii::$app->user->id || Yii::$app->user->identity->isAdmin): ?>
+    <?php if ($model->user->id == Yii::$app->user->id || (Yii::$app->user->identity && Yii::$app->user->identity->isAdmin)): ?>
         <p style="display: inline; margin-top: 14px;">
             <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a('Delete', ['delete', 'id' => $model->id], [
@@ -68,7 +68,7 @@ $this->registerJsFile('/js/view.js', ['position' => yii\web\View::POS_END]);
         'id' => 'create-comment-form'
     ]); ?>
 
-        <?= $form->field($create_new_comment, 'content', ['inputOptions' => ['id' => 'create-comment-content', 'class' => 'form-control']])->textarea(['rows' => 6])->label('') ?>
+        <?= $form->field($create_new_comment, 'content', ['inputOptions' => [ 'class' => 'create-comment-content form-control']])->textarea(['rows' => 6])->label('') ?>
 
         <div class="form-group">
             <?= Html::submitButton('Send', ['class' => 'btn btn-success']) ?>

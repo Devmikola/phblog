@@ -4,14 +4,25 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Comment;
+use app\models\Post;
 use yii\helpers\Url;
 use yii\web\Response;
 
 class CommentController extends \yii\web\Controller
 {
-    public function actionIndex()
+    public function actionIndex($post_id)
     {
-        return $this->render('index');
+        $post = Post::findOne($post_id);
+
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if($post)
+        {
+            return ['comments' => $this->renderPartial('index', ['comments' => $post->getParentComments()])];
+        } else {
+            return;
+        }
+
     }
 
     /**
@@ -23,27 +34,37 @@ class CommentController extends \yii\web\Controller
      */
     public function actionCreate($post_id, $parent_id)
     {
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
         $model = new Comment();
         $model->post_id = $post_id;
+        if($parent_id != 0 && !Comment::findOne($parent_id))
+        {
+            return ['success' => false];
+        }
         $parent_id == 0 ? : $model->parent_id = $parent_id;
 
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['post/view', 'id' => $post_id]);
+            return ['success' => true, 'comment-id-in-post' => $model->id_in_post];
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            return ['success' => false];
         }
     }
 
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-
         \Yii::$app->response->format = Response::FORMAT_JSON;
 
+        $model = Comment::findOne($id);
+        if(!$model)
+        {
+            return ['success' => false];
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return ['success' => true, 'comment-content' => $model->content, 'updated-at' => $this->findModel($id)->updated_at];
+            return ['success' => true, 'comment-content' => $model->content,
+                'updated-at' => Comment::findOne($id)->updated_at];
         } else {
             return ['success' => false];
         }
@@ -51,12 +72,24 @@ class CommentController extends \yii\web\Controller
 
     public function actionDelete($id)
     {
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
         $comment = Comment::findOne($id);
+        if(!$comment)
+        {
+            return ['success' => false];
+        }
+
         Comment::updateAllCounters(['id_in_post' => -1], "id_in_post > $comment->id_in_post");
         Comment::updateAll(['parent_id' => $comment->parent_id], "parent_id = $comment->id");
-        $comment->delete();
 
-        return $this->redirect(Url::to(['post/view', 'id' => $comment->post_id]));
+
+        if($comment->delete())
+        {
+            return ['success' => true];
+        } else {
+            return ['success' => false];
+        }
     }
 
     protected function findModel($id)

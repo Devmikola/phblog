@@ -3,19 +3,19 @@
  */
 $(document).ready(function() {
 
-    $("#comment-content").attr("placeholder", "Write a comment");
+    $(".create-comment-content").first().attr("placeholder", "Write a comment");
     default_action = $("#create-comment-form").attr("action").split("parent_id=0")[0]
 
     $(document).on('click', '.answer', function () {
         $("#create-comment-form").attr("action", default_action + 'parent_id=' + $(this).attr("comment-id"))
-        $("#create-comment-content").attr("placeholder", "Write answer for #" + $(this).attr("id_in_post") + " comment")
-        jQuery.scrollTo('#create-comment-content', 500);
+        $(".create-comment-content").first().attr("placeholder", "Write answer for #" + $(this).attr("id-in-post") + " comment")
+        jQuery.scrollTo($('.create-comment-content').first(), 500);
     });
 
-    $(".default-answer").click(function () {
+    $(document).on("click", ".default-answer", function () {
         $("#create-comment-form").attr("action", default_action + "parent_id=0")
-        $("#create-comment-content").attr("placeholder", "Write a comment")
-        jQuery.scrollTo('#create-comment-content', 500);
+        $(".create-comment-content").first().attr("placeholder", "Write a comment")
+        jQuery.scrollTo($('.create-comment-content').first(), 500);
     });
 
     $(document).on('click', '.update-button', function() {
@@ -38,6 +38,7 @@ $(document).ready(function() {
 
     });
 
+    // AJAX Update action
     $(document).on('beforeSubmit', '.update-comment-form', function() {
         form = $(this);
         if(form.find('.has-error').length) {
@@ -68,9 +69,82 @@ $(document).ready(function() {
                     parent.find(".discard-button").addClass('display-none')
 
                 }
+                else
+                {
+                    alert("Comment that you wish to update has been deleted.");
+                    reloadComments();
+                }
             }
         });
 
         return false;
     });
+
+    // AJAX Delete action
+    $(document).on("click", ".delete-button", function() {
+        if(confirm("Are you sure you want to delete this item ?"))
+        {
+            $.ajax({
+                url: $(this).attr('link'),
+                type: 'post',
+                success: function(data) {
+                    if(data['success'] == false)
+                    {
+                        alert("This comment was already deleted.");
+                    }
+                    reloadComments();
+                }
+            });
+        }
+        return false;
+    });
+
+    // AJAX Create action
+    $(document).on('beforeSubmit', '#create-comment-form', function() {
+        form = $(this);
+        if(form.find('.has-error').length) {
+            return false;
+        }
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'post',
+            data: form.serialize(),
+            success: function(data) {
+                if(data['success'] == false)
+                {
+                    alert("Comment that you wish to answer has been deleted.");
+                }
+
+                reloadComments();
+                $("#create-comment-form").attr("action", default_action + "parent_id=0")
+
+                if(data['success'] == true)
+                {
+                    $("#create-comment-form textarea").val("");
+
+                    $(".create-comment-content").first().attr("placeholder", "Write a comment")
+
+                    setTimeout(function(){
+                        jQuery.scrollTo($("[id-in-post='" + data['comment-id-in-post'] + "']").first().offset().top-70, 500);
+                        $("[id-in-post='" + data['comment-id-in-post'] + "']").first().fadeIn(400).fadeOut(400).fadeIn(400);
+                    }, 1000);
+                }
+
+            }
+        });
+
+        return false;
+    });
+
+    function reloadComments()
+    {
+        $.ajax({
+            url: "/comment/index/" + $(".post-view").attr("post-id"),
+            type: 'post',
+            success: function (data) {
+                $(".comments").html(data['comments']);
+            }
+        });
+    }
 });

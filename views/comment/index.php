@@ -7,7 +7,7 @@ use yii\helpers\Url;
 ?>
 
 <?php foreach($comments as $comment): ?>
-    <div class="comment-view" style="margin-bottom: 20px;" id_in_post="<?= $comment->id_in_post?>" parent_id="<?= $comment->parent_id?>">
+    <div class="comment-view" style="margin-bottom: 20px;" id-in-post="<?= $comment->id_in_post?>" parent_id="<?= $comment->parent_id?>">
         <p class="created-updated-at">
             <?= "#" . $comment->id_in_post ?> posted at <strong> <?= Html::encode($comment->created_at) ?> </strong>
             <?php if ($comment->created_at != $comment->updated_at): ?>
@@ -22,7 +22,7 @@ use yii\helpers\Url;
             </div>
             <?php if($comment->content):?>
                 <div class="col-sm-6 col-md-11 well well-lg">
-                    <?php if ($comment->user->id == Yii::$app->user->id || Yii::$app->user->identity->isAdmin): ?>
+                    <?php if ($comment->user->id == Yii::$app->user->id || (Yii::$app->user->identity && Yii::$app->user->identity->isAdmin)): ?>
 
                         <?php $form = ActiveForm::begin([
                             'action' => Url::to(['comment/update', 'id' => $comment->id]),
@@ -42,31 +42,23 @@ use yii\helpers\Url;
                     <p class="comment-content"><?= HtmlPurifier::process($comment->content) ?></p>
 
                 </div>
-            <?php else: ?>
-                <div class="col-sm-6 col-md-11 well well-lg">
-                    This comment was deleted and frozen.<br/>
-                    Function answer no longer available for it.
-                </div>
             <?php endif; ?>
         </div>
 
         <?php if($comment->content):?>
-            <?php if ($comment->user->id == Yii::$app->user->id || Yii::$app->user->identity->isAdmin): ?>
+            <?php if ($comment->user->id == Yii::$app->user->id || (Yii::$app->user->identity && Yii::$app->user->identity->isAdmin)): ?>
                 <p style="margin-top: 14px; display: inline;">
                     <?= Html::a('Edit', null, ['class' => 'btn btn-primary update-button']) ?>
                     <?= Html::a('Discard', null, ['class' => 'display-none btn btn-primary discard-button']) ?>
-                    <?= Html::a('Delete', ['comment/delete', 'id' => $comment->id], [
-                        'class' => 'btn btn-danger',
-                        'data' => [
-                            'confirm' => 'Are you sure you want to delete this item ?',
-                            'method' => 'post',
-                        ],
+                    <?= Html::a('Delete', null, [
+                        'class' => 'delete-button btn btn-danger',
+                        'link' => Url::to(['comment/delete', 'id' => $comment->id]),
                     ]) ?>
                 </p>
             <?php endif; ?>
             <p style="display: inline; margin-top: 14px;">
                 <?= Html::button('Answer', ['class' => 'answer btn btn-success',
-                    'id_in_post' => $comment->id_in_post,
+                    'id-in-post' => $comment->id_in_post,
                     'comment-id' => $comment->id,
                     'parent_id' => $comment->parent_id
                 ]) ?>
@@ -77,7 +69,7 @@ use yii\helpers\Url;
     <?php $child_comments = $comment->getChildComments() ?>
     <?php if($child_comments): ?>
         <div class="child-comments" style="margin: 20px 0px 0px 40px; padding-left: 20px; border-left: 1px solid #2e2e2e;">
-            <?php echo $this->renderFile('@app/views/comment/index.php', ['comments' => $child_comments])?>
+            <?php echo $this->renderFile('@app/views/comment/index.php', ['comments' => $child_comments]) ?>
         </div>
     <?php endif; ?>
 
