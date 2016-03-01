@@ -97,3 +97,52 @@ a {
 .display-none {
     display: none;
 }
+
+.comment-view {
+    margin-bottom: 20px;
+}
+
+.user-avatar {
+    text-align: center;
+}
+
+.user-avatar-img {
+    margin: 0;
+}
+
+.comment-actions {
+    margin-top: 14px;
+    display: inline;
+}
+
+.child-comments {
+    margin: 20px 0px 0px 40px;
+    padding-left: 20px;
+    border-left: 1px solid #2e2e2e;
+}
+
+.post-index-actions {
+    margin-top: 14px;
+
+}
+
+.post-content {
+    background-color: #66afe9;
+}
+
+.post-actions {
+    margin-top: 14px;
+    display: inline;
+}
+
+.comments {
+    margin-top: 30px;
+}
+
+.readme-text {
+    text-align: right;
+}
+
+.list-style-none {
+    list-style: none;
+}

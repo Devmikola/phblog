@@ -5,7 +5,6 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Post;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -31,6 +30,7 @@ class PostController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
+                        'actions' => ['index', 'view', 'create'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

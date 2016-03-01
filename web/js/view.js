@@ -1,6 +1,3 @@
-/**
- * Created by Psy on 25.02.2016.
- */
 $(document).ready(function() {
 
     $(".create-comment-content").first().attr("placeholder", "Write a comment");
@@ -118,13 +115,11 @@ $(document).ready(function() {
 
                 reloadComments();
                 $("#create-comment-form").attr("action", default_action + "parent_id=0")
+                $(".create-comment-content").first().attr("placeholder", "Write a comment")
 
                 if(data['success'] == true)
                 {
                     $("#create-comment-form textarea").val("");
-
-                    $(".create-comment-content").first().attr("placeholder", "Write a comment")
-
                     setTimeout(function(){
                         jQuery.scrollTo($("[id-in-post='" + data['comment-id-in-post'] + "']").first().offset().top-70, 500);
                         $("[id-in-post='" + data['comment-id-in-post'] + "']").first().fadeIn(400).fadeOut(400).fadeIn(400);
@@ -137,6 +132,7 @@ $(document).ready(function() {
         return false;
     });
 
+    // AJAX Index action
     function reloadComments()
     {
         $.ajax({

@@ -3,18 +3,49 @@
 namespace app\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use app\models\Comment;
 use app\models\Post;
-use yii\helpers\Url;
 use yii\web\Response;
 
 class CommentController extends \yii\web\Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->user->identity->isAdmin || $this->isUserAuthor()) {
+                                return true;
+                            }
+                            return false;
+                        }
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function beforeAction($action)
+    {
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        return parent::beforeAction($action);
+    }
+
     public function actionIndex($post_id)
     {
         $post = Post::findOne($post_id);
-
-        \Yii::$app->response->format = Response::FORMAT_JSON;
 
         if($post)
         {
@@ -25,17 +56,8 @@ class CommentController extends \yii\web\Controller
 
     }
 
-    /**
-     * Creates a new Comment model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     * @param $post_id
-     * @param $parent_id
-     */
     public function actionCreate($post_id, $parent_id)
     {
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-
         $model = new Comment();
         $model->post_id = $post_id;
         if($parent_id != 0 && !Comment::findOne($parent_id))
@@ -54,8 +76,6 @@ class CommentController extends \yii\web\Controller
 
     public function actionUpdate($id)
     {
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-
         $model = Comment::findOne($id);
         if(!$model)
         {
@@ -72,8 +92,6 @@ class CommentController extends \yii\web\Controller
 
     public function actionDelete($id)
     {
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-
         $comment = Comment::findOne($id);
         if(!$comment)
         {
@@ -92,13 +110,8 @@ class CommentController extends \yii\web\Controller
         }
     }
 
-    protected function findModel($id)
+    protected function isUserAuthor()
     {
-        if (($model = Comment::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
+        return Comment::findOne(Yii::$app->request->get('id'))->user_id == Yii::$app->user->id;
     }
-
 }

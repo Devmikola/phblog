@@ -27,18 +27,18 @@ $this->registerJsFile('/js/view.js', ['position' => yii\web\View::POS_END]);
     </p>
 
     <div class="row">
-        <div class="col-sm-6 col-md-1" style="text-align: center;">
-            <img src="http://gravatar.com/avatar/<?= $model->user->profile->gravatar_id ?>?s=100" alt="" class="img-rounded img-responsive" style="margin: 0;"/>
+        <div class="col-sm-6 col-md-1 user-avatar">
+            <img src="http://gravatar.com/avatar/<?= $model->user->profile->gravatar_id ?>?s=100" alt="" class="img-rounded img-responsive user-avatar-img"/>
             <?= Html::encode($model->user->username) ?>
         </div>
-        <div class="col-sm-6 col-md-11 well well-lg" style="background-color: #66afe9;">
+        <div class="col-sm-6 col-md-11 well well-lg post-content">
             <?= HtmlPurifier::process($model->content) ?>
         </div>
 
     </div>
 
     <?php if ($model->user->id == Yii::$app->user->id || (Yii::$app->user->identity && Yii::$app->user->identity->isAdmin)): ?>
-        <p style="display: inline; margin-top: 14px;">
+        <p class="post-actions">
             <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a('Delete', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
@@ -49,7 +49,7 @@ $this->registerJsFile('/js/view.js', ['position' => yii\web\View::POS_END]);
             ]) ?>
         </p>
     <?php endif; ?>
-    <p style="display: inline; margin-top: 14px;">
+    <p class="post-actions">
         <?= Html::button('Answer', ['class' => 'default-answer btn btn-success']) ?>
     </p>
 
@@ -57,7 +57,7 @@ $this->registerJsFile('/js/view.js', ['position' => yii\web\View::POS_END]);
 
 </div>
 
-<div class="comments" style="margin-top: 30px;">
+<div class="comments">
     <?= $this->render('//comment/index', ['comments' => $model->getParentComments()])?>
 </div>
 

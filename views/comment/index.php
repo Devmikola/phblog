@@ -7,7 +7,7 @@ use yii\helpers\Url;
 ?>
 
 <?php foreach($comments as $comment): ?>
-    <div class="comment-view" style="margin-bottom: 20px;" id-in-post="<?= $comment->id_in_post?>" parent_id="<?= $comment->parent_id?>">
+    <div class="comment-view" id-in-post="<?= $comment->id_in_post?>" parent_id="<?= $comment->parent_id?>">
         <p class="created-updated-at">
             <?= "#" . $comment->id_in_post ?> posted at <strong> <?= Html::encode($comment->created_at) ?> </strong>
             <?php if ($comment->created_at != $comment->updated_at): ?>
@@ -16,8 +16,8 @@ use yii\helpers\Url;
         </p>
 
         <div class="row">
-            <div class="col-sm-6 col-md-1" style="text-align: center;">
-                <img src="http://gravatar.com/avatar/<?= $comment->user->profile->gravatar_id ?>?s=100" alt="" class="img-rounded img-responsive" style="margin: 0;"/>
+            <div class="col-sm-6 col-md-1 user-avatar">
+                <img src="http://gravatar.com/avatar/<?= $comment->user->profile->gravatar_id ?>?s=100" alt="" class="img-rounded img-responsive user-avatar-img"/>
                 <?= Html::a(Html::encode($comment->user->username), ['/user/profile/show', 'id' => Yii::$app->user->id], ['target' => '_blank'])  ?>
             </div>
             <?php if($comment->content):?>
@@ -47,7 +47,7 @@ use yii\helpers\Url;
 
         <?php if($comment->content):?>
             <?php if ($comment->user->id == Yii::$app->user->id || (Yii::$app->user->identity && Yii::$app->user->identity->isAdmin)): ?>
-                <p style="margin-top: 14px; display: inline;">
+                <p class="comment-actions">
                     <?= Html::a('Edit', null, ['class' => 'btn btn-primary update-button']) ?>
                     <?= Html::a('Discard', null, ['class' => 'display-none btn btn-primary discard-button']) ?>
                     <?= Html::a('Delete', null, [
@@ -56,7 +56,7 @@ use yii\helpers\Url;
                     ]) ?>
                 </p>
             <?php endif; ?>
-            <p style="display: inline; margin-top: 14px;">
+            <p class="comment-actions">
                 <?= Html::button('Answer', ['class' => 'answer btn btn-success',
                     'id-in-post' => $comment->id_in_post,
                     'comment-id' => $comment->id,
@@ -68,7 +68,7 @@ use yii\helpers\Url;
 
     <?php $child_comments = $comment->getChildComments() ?>
     <?php if($child_comments): ?>
-        <div class="child-comments" style="margin: 20px 0px 0px 40px; padding-left: 20px; border-left: 1px solid #2e2e2e;">
+        <div class="child-comments">
             <?php echo $this->renderFile('@app/views/comment/index.php', ['comments' => $child_comments]) ?>
         </div>
     <?php endif; ?>

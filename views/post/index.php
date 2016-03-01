@@ -41,7 +41,7 @@ echo LinkPager::widget([
             </div>
 
             <?php if ($post->user->id == Yii::$app->user->id || Yii::$app->user->identity->isAdmin): ?>
-                <p style="margin-top: 14px;">
+                <p class="post-index-actions">
                     <?= Html::a('Update', ['update', 'id' => $post->id], ['class' => 'btn btn-primary']) ?>
                     <?= Html::a('Delete', ['delete', 'id' => $post->id], [
                         'class' => 'btn btn-danger',
@@ -57,3 +57,8 @@ echo LinkPager::widget([
     <?php endforeach; ?>
 
 </div>
+
+<?php echo LinkPager::widget([
+    'pagination' => $pagination,
+]);
+?>

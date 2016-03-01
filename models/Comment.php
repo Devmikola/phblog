@@ -123,13 +123,11 @@ class Comment extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-
             if (!$this->id_in_post)
             {
                 $max_id_in_post = Comment::find()->where(['post_id' => $this->post_id])->max('id_in_post');
                 $max_id_in_post ? $this->id_in_post = $max_id_in_post + 1 : $this->id_in_post = 1;
             }
-
             return true;
         }
         return false;
