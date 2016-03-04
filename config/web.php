@@ -29,18 +29,12 @@ $config = [
 
             ),
         ],
-//        'user' => [
-//            'identityClass' => 'app\models\User',
-//            'enableAutoLogin' => true,
-//        ],
+
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
         'log' => [
@@ -58,7 +52,7 @@ $config = [
         'user' => [
             'class' => 'dektrium\user\Module',
             'enableConfirmation' => false,
-            'admins' => ['asd']
+            'admins' => ['first']
         ],
     ],
     'params' => $params,
