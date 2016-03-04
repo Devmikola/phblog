@@ -16,7 +16,7 @@ Features:
 * Tree of comments, you can comment to comment by using "Answer" button;
 * After deleting comment, all subcomments of first just up self level in comments tree;
 * Full AJAX realisation for comments: Index, Create, Update, Delete;<br>
-* users avatars, displaying at comment, post, profile and settings.
+* Users avatars, displaying at comment, post, profile and settings.
 
 Contacts
 ------------------------------------
