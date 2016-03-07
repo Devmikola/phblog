@@ -36,7 +36,8 @@ $(document).ready(function() {
     });
 
     // AJAX Update action
-    $(document).on('beforeSubmit', '.update-comment-form', function() {
+    $(document).on('submit', '.update-comment-form', function(event) {
+        event.preventDefault();
         form = $(this);
         if(form.find('.has-error').length) {
             return false;
