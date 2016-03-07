@@ -55,7 +55,7 @@ $config = [
             'admins' => ['first']
         ],
     ],
-    'timeZone' => 'Europe/Kiev',
+    'timeZone' => 'UTC',
     'params' => $params,
 ];
 
