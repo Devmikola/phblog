@@ -4,7 +4,7 @@ $params = require(__DIR__ . '/params.php');
 
 $config = [
     'id' => 'basic',
-    'timeZone' => 'UTC',
+    'timeZone' => 'Europe/Kiev',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
