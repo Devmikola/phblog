@@ -2,7 +2,7 @@ Phblog
 ============================
 &#10102;  This is demonstration of skills project built on Yii 2, PHP 5.6, HTML, JavaScript, JQuery and SQL.</br>
 &#10103;  This project is simple blog with tree comments that works through AJAX.</br>
-&#10104;  <b>Location of the project: in process.</b>
+&#10104;  <b>Location of the project: https://desolate-fjord-73448.herokuapp.com.</b>
 
 General functional:
 ------------------------------------
