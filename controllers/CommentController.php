@@ -84,7 +84,7 @@ class CommentController extends \yii\web\Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return ['success' => true, 'comment-content' => $model->content,
-                'updated-at' => Comment::findOne($id)->updated_at];
+                'updated-at' => Yii::$app->formatter->asDatetime(Comment::findOne($id)->updated_at, 'php:H:i:s / d M Y')];
         } else {
             return ['success' => false];
         }

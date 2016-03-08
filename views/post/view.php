@@ -20,9 +20,9 @@ $this->registerJsFile('/js/view.js', ['position' => yii\web\View::POS_END]);
 
     <p>
         Posted by <strong> <?= Html::a(Html::encode($model->user->username), ['/user/profile/show', 'id' => Yii::$app->user->id], ['target' => '_blank'])  ?> </strong>
-        at <strong> <?= Html::encode($model->created_at) ?> </strong>
+        at <strong> <?= Html::encode(Yii::$app->formatter->asDatetime($model->created_at, 'php:H:i:s / d M Y')) ?> </strong>
         <?php if ($model->created_at != $model->updated_at): ?>
-            <br/>Updated at <strong> <?= Html::encode($model->updated_at) ?> </strong>
+            <br/>Updated at <strong> <?= Html::encode(Yii::$app->formatter->asDatetime($model->updated_at, 'php:H:i:s / d M Y')) ?> </strong>
         <?php endif; ?>
     </p>
 

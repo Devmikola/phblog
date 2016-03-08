@@ -33,7 +33,7 @@ echo LinkPager::widget([
 
             <p>
                 Posted by <strong> <?= Html::a(Html::encode($post->user->username), ['/user/profile/show', 'id' => Yii::$app->user->id], ['target' => '_blank'])  ?> </strong>
-                at <strong> <?= Html::encode($post->created_at) ?> </strong>
+                at <strong> <?= Html::encode(Yii::$app->formatter->asDatetime($post->created_at, 'php:H:i:s / d M Y')) ?>  </strong>
             </p>
 
             <div>

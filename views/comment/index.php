@@ -9,9 +9,9 @@ use yii\helpers\Url;
 <?php foreach($comments as $comment): ?>
     <div class="comment-view" id-in-post="<?= $comment->id_in_post?>" parent_id="<?= $comment->parent_id?>">
         <p class="created-updated-at">
-            <?= "#" . $comment->id_in_post ?> posted at <strong> <?= Html::encode($comment->created_at) ?> </strong>
+            <?= "#" . $comment->id_in_post ?> posted at <strong> <?= Html::encode(Yii::$app->formatter->asDatetime($comment->created_at, 'php:H:i:s / d M Y')) ?> </strong>
             <?php if ($comment->created_at != $comment->updated_at): ?>
-                <br/>Updated at <strong class="updated-at"> <?= Html::encode($comment->updated_at) ?> </strong>
+                <br/>Updated at <strong class="updated-at"> <?= Html::encode(Yii::$app->formatter->asDatetime($comment->updated_at, 'php:H:i:s / d M Y')) ?> </strong>
             <?php endif; ?>
         </p>
 

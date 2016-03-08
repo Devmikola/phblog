@@ -4,6 +4,7 @@ $params = require(__DIR__ . '/params.php');
 
 $config = [
     'id' => 'basic',
+    'timeZone' => 'UTC',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
@@ -55,7 +56,7 @@ $config = [
             'admins' => ['first']
         ],
     ],
-    'timeZone' => 'UTC',
+
     'params' => $params,
 ];
 
