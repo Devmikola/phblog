@@ -1,6 +1,6 @@
-Phblog
+Phblog 1.0
 ============================
-&#10102;  This is demonstration of skills project built on Yii 2, PHP 5.6, HTML, JavaScript, JQuery and SQL.</br>
+&#10102;  This is demonstration of skills project built on Yii 2, PHP 5.6, HTML, CSS, JavaScript, JQuery and SQL.</br>
 &#10103;  This project is simple blog with tree comments that works through AJAX.</br>
 &#10104;  <b>Location of the project: https://desolate-fjord-73448.herokuapp.com.</b>
 
@@ -15,7 +15,7 @@ Features:
 ------------------------------------
 * Tree of comments, you can comment to comment by using "Answer" button;
 * After deleting comment, all subcomments of first just up self level in comments tree;
-* Full AJAX realisation for comments: Index, Create, Update, Delete;<br>
+* Full AJAX realisation for comments: Index, Create, Update, Delete;
 * Users avatars, displaying at comment, post, profile and settings.
 
 Contacts
